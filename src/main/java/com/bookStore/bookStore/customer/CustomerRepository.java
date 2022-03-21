@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-	@Query("SELECT c FROM Customer c WHERE c.firstName like %:firstName%")
-	Page<Customer> findFirstName(String firstName, Pageable pageable);
+	@Query("SELECT c FROM Customer c WHERE c.firstName like %:firstName% AND c.lastName like %:lastName%")
+	Page<Customer> findFirstName(String firstName,String lastName, Pageable pageable);
 	
 	Optional<Customer> findByFirstName(String firstName);
 	

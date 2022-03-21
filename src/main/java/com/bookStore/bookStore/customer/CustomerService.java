@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CustomerService {
 
-	Page<Customer>getAllCustomer(String firstName, Pageable pageable);
+	Page<Customer>getAllCustomer(String firstName,String lastName, Pageable pageable);
 	
 	Customer addNewCustomer(Customer customer);
 	

@@ -56,7 +56,7 @@ public class BookController {
 		response.put("totalPages", pageBook.getTotalPages());
 		response.put("size", pageBook.getSize());
 		response.put("first", pageBook.isFirst());
-		response.put("first", pageBook.isLast());
+		response.put("last", pageBook.isLast());
 		response.put("empty", pageBook.isEmpty());
 		
 		return new ResponseEntity<>(response, OK);
