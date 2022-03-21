@@ -25,10 +25,9 @@ public class BookController {
 	
 	@PostMapping("/post")
 	 Book addNewBook(@RequestBody Book book ) {
-		
 		return bookService.addBook(book);
 	}
-	
+		
 	@GetMapping("/list")
 	ResponseEntity<Map<String, Object>> getAllBook(
 			@RequestParam(required = false, defaultValue = "") String name,

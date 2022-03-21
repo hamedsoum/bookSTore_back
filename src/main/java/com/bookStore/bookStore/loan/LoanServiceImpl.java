@@ -52,8 +52,18 @@ public class LoanServiceImpl implements LoanService{
 
 	@Override
 	public Loan updateLoan(Integer id, LoanDto loanDto) {
-		// TODO Auto-generated method stub
-		return null;
+		Loan loanToUpdate = loanRepository.findById(id).orElse(null);
+		Book book = bookRepository.findById(loanDto.getIdBook()).orElse(null);
+		Customer customer = customerRepository.findById(loanDto.getIdCustomer()).orElse(null);
+		if (book == null) throw new IllegalStateException("aucun livre trouve pour cet indentifiant");
+		if (customer == null) throw new IllegalStateException("aucun client trouve pour cet indentifiant");
+		if (loanToUpdate == null) throw new IllegalStateException("aucun emprun trouve pour cet identifiant");
+		
+		BeanUtils.copyProperties(loanDto, loanToUpdate, "id");
+		loanToUpdate.setBook(book);
+		loanToUpdate.setCustomer(customer);
+		loanRepository.save(loanToUpdate);
+		return loanRepository.save(loanToUpdate);
 	}
 
 	@Override
