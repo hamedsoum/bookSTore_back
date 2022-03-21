@@ -31,11 +31,14 @@ public class LoanServiceImpl implements LoanService{
 		Customer customer = customerRepository.findById(loanDto.getIdCustomer()).orElse(null);
 		if (book == null) throw new IllegalStateException("aucun livre trouve pour cet indentifiant");
 		if (customer == null) throw new IllegalStateException("aucun client trouve pour cet indentifiant");
-		if (book.getLoaned() == true) {
-			Loan loanByIBook = loanRepository.getLoanByIdBook(book.getId());
-			if (loanByIBook != null) throw new IllegalStateException("le livre a ete emprunte la date de retour est le : " + loanByIBook.getReturnDate());
+		if (book.getQty() == 0) {
+//			Loan loanByIBook = loanRepository.getLoanByIdBook(book.getId());
+			 throw new IllegalStateException("plus de livre disponible" );
 		} else {
-			book.setLoaned(true);
+			Integer newBookQty = book.getQty() - 1;
+//			Integer newLoanQty = book.getLoaned() + 1;
+			book.setQty(newBookQty);
+//			book.setLoaned(newLoanQty);
 		}
 //		if (loanDto.getReleaseDate() == null) {
 //			Date date = new Date();

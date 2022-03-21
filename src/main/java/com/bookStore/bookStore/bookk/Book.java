@@ -20,5 +20,6 @@ public class Book {
 	private String name;
 	private String author;
 	private Boolean loaned;
+	private Integer qty;
 }
 
