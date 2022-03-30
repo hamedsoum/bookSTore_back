@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
 	
-	@Query("SELECT b FROM Book b WHERE b.name like %:name% ")
-	Page<Book> findByName(String name, Pageable pageable);
+	@Query("SELECT b FROM Book b WHERE b.available =:available AND b.name like %:name%")
+	Page<Book> finAllBook(String name,Boolean available, Pageable pageable);
 	
 	@Query("SELECT b FROM Book b Where b.id =:id")
 	Book getBookDetails(Integer id);
@@ -21,5 +21,5 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 	Optional<Book> findByName(String name);
 	
 	@Query("SELECT b FROM Book b")
-	List<Book>findAllBook();
+	List<Book>findAllBookSimpleList();
 }

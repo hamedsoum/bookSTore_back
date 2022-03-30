@@ -29,24 +29,22 @@ public class LoanServiceImpl implements LoanService{
 	public Loan addNewLoan(LoanDto loanDto) {
 		Book book = bookRepository.findById(loanDto.getIdBook()).orElse(null);
 		Customer customer = customerRepository.findById(loanDto.getIdCustomer()).orElse(null);
+		
 		if (book == null) throw new IllegalStateException("aucun livre trouve pour cet indentifiant");
+		
 		if (customer == null) throw new IllegalStateException("aucun client trouve pour cet indentifiant");
-		if (book.getQty() == 0) {
-//			Loan loanByIBook = loanRepository.getLoanByIdBook(book.getId());
-			 throw new IllegalStateException("plus de livre disponible" );
+		
+		if (book.getQty() == book.getLoanQty() || book.getQty() == 0) {
+			 throw new IllegalStateException("plus de livre disponible pour un emprunt" );
 		} else {
-			Integer newBookQty = book.getQty() - 1;
-//			Integer newLoanQty = book.getLoaned() + 1;
-			book.setQty(newBookQty);
-//			book.setLoaned(newLoanQty);
+			Integer newBookLoanQty = book.getLoanQty() + 1;
+			book.setLoanQty(newBookLoanQty);
+			if (book.getQty() == book.getLoanQty())book.setAvailable(false);
 		}
-//		if (loanDto.getReleaseDate() == null) {
-//			Date date = new Date();
-//			loanDto.setReleaseDate(date);
-//		}
-		//ecrire une reque qui retoure la da date de retour d'un livre emprunte
+		
 		Loan addLoan = new Loan();
 		BeanUtils.copyProperties(loanDto, addLoan, "id");
+		addLoan.setLoanNumber("loan" + 1);
 		addLoan.setBook(book);
 		addLoan.setCustomer(customer);
 		loanRepository.save(addLoan);

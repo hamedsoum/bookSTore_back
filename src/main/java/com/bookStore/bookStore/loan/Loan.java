@@ -41,4 +41,6 @@ public class Loan {
 	private Date releaseDate;
 	
 	private Date returnDate;
+	
+	private String loanNumber;
 }

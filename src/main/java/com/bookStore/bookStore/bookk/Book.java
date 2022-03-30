@@ -19,7 +19,17 @@ public class Book {
 	private Integer id;
 	private String name;
 	private String author;
-	private Boolean loaned;
 	private Integer qty;
+	private Integer loanQty;
+	private Boolean available;
+	
+	@Column(columnDefinition = "MEDIUMBLOB")
+	private String imageUrl;
+	
+//	@Transient
+//	String getLocalImagePath() {
+//		
+//		return "/book-images/" + id + "/" + imageUrl;
+//	}
 }
 
