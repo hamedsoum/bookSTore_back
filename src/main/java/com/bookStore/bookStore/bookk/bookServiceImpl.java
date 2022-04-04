@@ -3,7 +3,6 @@ package com.bookStore.bookStore.bookk;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,18 +34,28 @@ public class bookServiceImpl implements BookService {
 //	}
 
 	@Override
-	public Book updateBook(Integer id, Book book) {
+	public Book updateBook(Integer id,  MultipartFile file, String name, String author,Integer qty, Integer loanQty, Boolean available) {
 		Book bookToUpdate = bookRepository.findById(id).orElse(null);
 		if (bookToUpdate == null) throw new IllegalStateException("Aucun livre trouvé pour ce identifiant ");
 		
-		Book bookByName = bookRepository.findByName(book.getName()).orElse(null);
+		Book bookByName = bookRepository.findByName(name).orElse(null);
 		if (bookByName != null) {
 			
 			if (bookToUpdate.getId() != bookByName.getId()) {
 				throw new IllegalStateException("le nom du livre existe deja");
 			}
 		}
-		BeanUtils.copyProperties(book, bookToUpdate, "id");
+		
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		if (fileName.contains("..")) throw new IllegalStateException("fichier invalid");
+			System.out.println(fileName);
+			bookToUpdate.setImageUrl(file.getOriginalFilename());		
+			bookToUpdate.setName(name);
+			bookToUpdate.setAuthor(author);
+			bookToUpdate.setQty(qty);
+			bookToUpdate.setLoanQty(loanQty);
+			bookToUpdate.setAvailable(available);
+//		BeanUtils.copyProperties(book, bookToUpdate, "id");
 		bookRepository.save(bookToUpdate);
 		return bookToUpdate;
 	}
@@ -81,21 +90,16 @@ public class bookServiceImpl implements BookService {
 		Book b = new Book();
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		if (fileName.contains("..")) throw new IllegalStateException("fichier invalid");
-			b.setImageUrl(file.getOriginalFilename());
-//			b.setImageUrl(java.util.Base64.getEncoder().encodeToString(file.getBytes()));
-			// TODO Auto-generated catch block
-		
-		b.setName(name);
-		b.setAuthor(author);
-		b.setQty(qty);
-		b.setLoanQty(0);
-		b.setAvailable(true);
-		Book newBook = bookRepository.save(b);
-		String uploadDir = "./book-images/";
-		
-		FileUploadUtil.saveFile(uploadDir, fileName, file);
-
-//		FileUploadUtil.saveFile(uploadDir, fileName, file);
+			System.out.println(fileName);
+			b.setImageUrl(file.getOriginalFilename());		
+			b.setName(name);
+			b.setAuthor(author);
+			b.setQty(qty);
+			b.setLoanQty(0);
+			b.setAvailable(true);
+			bookRepository.save(b);
+			String uploadDir = "./book-images/";
+			FileUploadUtil.saveFile(uploadDir, fileName, file);
 
 	}
 

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 
 @RestController
 @RequestMapping("/loan")
@@ -34,22 +34,26 @@ public class LoanController {
 	LoanService loanService;
 	
 	@PostMapping("/post")
+	@ApiOperation("ajouter un emprunt dans le systeme")
 	ResponseEntity<Loan> addNewLoan(@RequestBody LoanDto loanDto){
 		Loan loanTOadd = loanService.addNewLoan(loanDto);
 		return new ResponseEntity<Loan>(loanTOadd, HttpStatus.OK);
 	}
 	
 	@PutMapping("/update/{id}")
+	@ApiOperation("modifier un emprunt dans le systeme")
 	Loan updateLoan(@PathVariable("id") Integer id, @RequestBody LoanDto loanDto) {
 		return loanService.updateLoan(id, loanDto);
 	}
 	
 	@GetMapping("/simple-list")
+	@ApiOperation("liste simple de tous les emprunts dans le systeme")
 	List<Loan>loanSimpleList(){
 		return loanService.loanSimpleList();
 	}
 	
 	@GetMapping("/list")
+	@ApiOperation("liste pagine de tous les emprunt dans le systeme")
 	public ResponseEntity<Map<String, Object>> getAllLoan(
 			@RequestParam(required = false, defaultValue = "")  Integer book,
 			@RequestParam(defaultValue = "0") int page,
@@ -78,6 +82,13 @@ public class LoanController {
 		response.put("last", pageLoan.isLast());
 		response.put("empty", pageLoan.isEmpty());
 		return new ResponseEntity<>(response, OK);
+	}
+	
+	
+	@ApiOperation("details d'un emprunt dans le systeme")
+	@GetMapping("getDetails/{loanId}")
+	Loan getLoanDetail(@PathVariable Integer loanId) {
+		return loanService.getLaon(loanId);
 	}
 	
 

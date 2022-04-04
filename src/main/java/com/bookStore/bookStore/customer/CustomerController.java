@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 
 @RestController
 @RequestMapping("/customer")
@@ -32,6 +34,7 @@ public class CustomerController {
 	
 	
 	@GetMapping("/list")
+	@ApiOperation("liste pagine de tous les clients dans le systeme")
 	ResponseEntity<Map<String, Object>>getAllCustomer(
 			@RequestParam(required = false, defaultValue ="") String firstName,
 			@RequestParam(required = false, defaultValue ="") String lastName,
@@ -67,25 +70,30 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/post")
+	@ApiOperation("ajouter un client dans le systeme")
 	Customer addNewCustomer(@RequestBody Customer customer) {
 		return customerService.addNewCustomer(customer);
 	}
 	
 	@PutMapping("/update/{customerId}")
+	@ApiOperation("modifier un client dans le systeme")
 	Customer updateCustomer(@PathVariable("customerId") Integer id, @RequestBody Customer customer){
 		return customerService.updateCustomer(id, customer);
 	}
 	@GetMapping("/simple-list")
+	@ApiOperation("liste simple de tous les cleints dans le systeme")
 	List<Customer> getSiAllCustomerSimpleList(){
 		return customerService.getAllCustomerSimpleList();
 	}
 	
 	@GetMapping("/getDetails/{customerId}")
+	@ApiOperation("details d'un client dans le systeme")
 	Customer getCustomerDetails(@PathVariable("customerId") Integer id) {
 		return customerService.getCutomerDetails(id);
 	}
 	
 	@DeleteMapping("delete/{customerId}")
+	@ApiOperation("supprimer un client dans le systeme")
 	void deleteCustomer (@PathVariable("customerId") Integer id) {
 		customerService.deleteCustomer(id);
 	} 

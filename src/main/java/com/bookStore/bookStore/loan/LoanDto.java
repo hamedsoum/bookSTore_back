@@ -18,4 +18,5 @@ public class LoanDto {
 	private Integer idCustomer;
 	private Date releaseDate;
 	private Date returnDate;
+	private String loanNumber;
 }

@@ -22,7 +22,7 @@ public interface BookService {
 //	Book addBook(Book book); 
 	public void addBook( MultipartFile file, String name, String author,Integer qty, Integer loanQty, Boolean available ) throws IOException;
 	
-	Book updateBook(Integer id, Book book);
+	Book updateBook(Integer id,  MultipartFile file, String name, String author,Integer qty, Integer loanQty, Boolean available);
 
 	List<Book>getBookSimpleList();
 }

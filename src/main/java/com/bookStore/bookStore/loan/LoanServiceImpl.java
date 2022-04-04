@@ -1,5 +1,7 @@
 package com.bookStore.bookStore.loan;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -44,10 +46,24 @@ public class LoanServiceImpl implements LoanService{
 		
 		Loan addLoan = new Loan();
 		BeanUtils.copyProperties(loanDto, addLoan, "id");
-		addLoan.setLoanNumber("loan" + 1);
+		LocalDate current_date = LocalDate.now();
+		Integer lastLoanId = loanRepository.getlastLoanId();
+		if (lastLoanId == null) {
+			addLoan.setLoanNumber("LOAN1"+"-"+ current_date.getYear());
+		}else {
+			lastLoanId ++;
+			addLoan.setLoanNumber("LOAN" + lastLoanId +"-"+ current_date.getYear());
+		}
+//		addLoan.setLoanNumber("loan" + 1);
 		addLoan.setBook(book);
 		addLoan.setCustomer(customer);
 		loanRepository.save(addLoan);
+		Date lastLoanDate = loanRepository.lastReturnBookDate(book.getId());
+		System.out.println(lastLoanDate);
+		if (lastLoanDate != null) {
+			book.setLastLoanReturnDate(lastLoanDate);
+			bookRepository.save(book);
+		}
 		return addLoan;		
 	}
 
@@ -80,6 +96,11 @@ public class LoanServiceImpl implements LoanService{
 		} else {
 			return loanRepository.getAllLoanByBook(book,pageable);
 		}
+	}
+
+	@Override
+	public Loan getLaon(Integer id) {
+		return loanRepository.getDetail(id);
 	}
 
 }

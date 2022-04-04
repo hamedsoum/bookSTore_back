@@ -1,5 +1,7 @@
 package com.bookStore.bookStore.bookk;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +24,7 @@ public class Book {
 	private Integer qty;
 	private Integer loanQty;
 	private Boolean available;
-	
+	private Date lastLoanReturnDate;
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private String imageUrl;
 	

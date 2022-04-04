@@ -1,8 +1,6 @@
 package com.bookStore.bookStore.bookk;
 
 import static org.springframework.http.HttpStatus.OK;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +53,7 @@ public class BookController {
 	@ApiOperation("liste pagine de tous les livres dans le systeme")
 	ResponseEntity<Map<String, Object>> getAllBook(
 			@RequestParam(required = false, defaultValue = "") String name,
-			@RequestParam(required = false, defaultValue = "") Boolean available,
+			@RequestParam(required = false, defaultValue = "1") Boolean available,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "id,desc") String[] sort
@@ -98,16 +96,33 @@ public class BookController {
 		bookService.deleteBook(id);
 	}
 	
-	@PutMapping("/update/{bookId}")
+	
+	@PostMapping("/update")
 	@ApiOperation("modifier un livre dans le systeme")
-	Book updateBook(@PathVariable("bookId") Integer id, @RequestBody Book book) {
-		return bookService.updateBook(id, book);
+	public Book updateBook(
+			@RequestParam("file") MultipartFile file,
+			@RequestParam("id") Integer id,
+			@RequestParam("name") String name,
+			@RequestParam("author") String author,
+			@RequestParam("qty") Integer qty,
+			@RequestParam("loanQty") Integer loanQty,
+			@RequestParam("available") Boolean available
+			) throws IOException {
+return bookService.updateBook(id,file, name, author, qty, loanQty, available);
+		
 	}
+//	Book updateBook(@PathVariable("bookId") Integer id, @RequestBody Book book) {
+//		return bookService.updateBook(id, book);
+//	}
 	
 	@GetMapping("/getDetails/{bookId}")
 	@ApiOperation("details d'un livre dans le systeme")
 	Book getBookDetails(@PathVariable("bookId") Integer id) {
-		return bookService.getBookDetails(id);
+		Book book =  bookService.getBookDetails(id);
+		String fileDowloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/book/book-image/" + book.getImageUrl()).toUriString();
+//		String fileDowloadUri = "./book-images/" + book.getId() + "/" + book.getImageUrl();
+		book.setImageUrl(fileDowloadUri);
+		return book;
 	}
 	
 	@ApiOperation("liste simple de tous les livres dans le systeme")
@@ -117,6 +132,7 @@ public class BookController {
 	}
 	
 	@GetMapping(path ="/book-image/{fileName}", produces = MediaType.IMAGE_JPEG_VALUE)
+	@ApiOperation("image d'un livre dans le systeme")
 	public byte[] getServerImage(@PathVariable("fileName") String fileName) throws IOException{
 		return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/Documents/workspace-spring-tool/bookStore/book-images/" +fileName));
 	}

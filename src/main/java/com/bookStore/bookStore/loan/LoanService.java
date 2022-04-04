@@ -16,5 +16,7 @@ public interface LoanService {
 	Loan updateLoan(Integer id, LoanDto loanDto);
 	
 	List<Loan>loanSimpleList();
+	
+	Loan getLaon(Integer id);
 }
  
