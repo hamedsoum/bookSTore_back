@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.bookStore.bookStore.utility.FileUploadUtil;
 
 @Service
@@ -18,11 +17,6 @@ public class bookServiceImpl implements BookService {
 	@Autowired
 	BookRepository bookRepository;
 
-	@Override
-	public Page<Book> findAllBook(String name, Boolean available, Pageable pageable) {
-		return bookRepository.finAllBook(name,available,pageable);
-	}
-	
 	
 //	@Override
 //	public Book addBook(Book book) {
@@ -102,6 +96,31 @@ public class bookServiceImpl implements BookService {
 			FileUploadUtil.saveFile(uploadDir, fileName, file);
 
 	}
+
+
+
+	@Override
+	public Page<Book> findAllBook(Pageable pageable) {
+		return bookRepository.findAllBook(pageable);
+	}
+
+
+
+	@Override
+	public Page<Book> findAllBookByAvailableAndName(String name, Boolean availabe, Pageable pageable) {
+		return bookRepository.findAllBookByAvailableAndName(name, availabe, pageable);
+	}
+
+	
+
+
+	@Override
+	public Page<Book> findAllBookByName(String name, Pageable pageable) {
+		return bookRepository.findAllBookByName(name, pageable);
+	}
+
+
+	
 
 
 

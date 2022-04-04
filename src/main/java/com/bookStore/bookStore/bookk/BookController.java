@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +54,7 @@ public class BookController {
 	@ApiOperation("liste pagine de tous les livres dans le systeme")
 	ResponseEntity<Map<String, Object>> getAllBook(
 			@RequestParam(required = false, defaultValue = "") String name,
-			@RequestParam(required = false, defaultValue = "1") Boolean available,
+			@RequestParam(required = false, defaultValue = "") String available,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "id,desc") String[] sort
@@ -67,7 +68,16 @@ public class BookController {
 		
 		Page<Book> pageBook;
 		
-		pageBook = bookService.findAllBook(name,available, paging);
+		pageBook = bookService.findAllBook(paging);
+		
+		if (StringUtils.isNoneBlank(available)) {
+			
+			pageBook = bookService.findAllBookByAvailableAndName(name, Boolean.parseBoolean(available), paging);
+			
+		}else if  (StringUtils.isNoneBlank(name)){
+			
+			pageBook = bookService.findAllBookByName(name, paging);
+		}
 		
 		pageBook.forEach(book ->{
 			String fileDowloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/book/book-image/" + book.getImageUrl()).toUriString();

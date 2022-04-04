@@ -13,11 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface BookService {
 	
-    Page<Book> findAllBook(String name,Boolean availabe, Pageable pageable);
+    Page<Book> findAllBook(Pageable pageable);
+    
+    Page<Book> findAllBookByAvailableAndName(String name,Boolean availabe, Pageable pageable);
+    
+    Page<Book> findAllBookByName(String name, Pageable pageable);
 	
 	void deleteBook(Integer id);
 	
-	Book getBookDetails(Integer id);
+	Book getBookDetails(Integer id); 
 	
 //	Book addBook(Book book); 
 	public void addBook( MultipartFile file, String name, String author,Integer qty, Integer loanQty, Boolean available ) throws IOException;
