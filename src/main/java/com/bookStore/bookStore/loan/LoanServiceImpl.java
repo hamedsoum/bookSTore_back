@@ -4,12 +4,13 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import com.bookStore.bookStore.bookk.Book;
 import com.bookStore.bookStore.bookk.BookRepository;
@@ -89,12 +90,39 @@ public class LoanServiceImpl implements LoanService{
 	}
 
 	@Override
-	public Page<Loan> getAllLoan(Integer book, Pageable pageable) {
-		if (ObjectUtils.isEmpty(book)) {
+	public Page<Loan> getAllLoan(Integer book,Integer customer, String loanNumber, Pageable pageable) {
+		if (ObjectUtils.isEmpty(book) && ObjectUtils.isEmpty(customer) && StringUtils.isEmpty(loanNumber) ) {
+			
 			return loanRepository.getAllLoan(pageable);
-
-		} else {
-			return loanRepository.getAllLoanByBook(book,pageable);
+			
+		}else if (ObjectUtils.isNotEmpty(book) && ObjectUtils.isEmpty(customer) && StringUtils.isEmpty(loanNumber.trim())) {
+			
+			return loanRepository.getAllLoanByBook(book, pageable);
+			
+		}else if (ObjectUtils.isEmpty(book) && ObjectUtils.isNotEmpty(customer) && StringUtils.isEmpty(loanNumber.trim())) {
+			
+			return loanRepository.getAllLoanByCustomer(customer, pageable);
+			
+		}else if (ObjectUtils.isEmpty(book) && ObjectUtils.isEmpty(customer) && StringUtils.isNotEmpty(loanNumber.trim())) {
+			
+			return loanRepository.getAllLoanByLoanNumber(loanNumber, pageable);
+			
+		}else if (ObjectUtils.isNotEmpty(book) && ObjectUtils.isNotEmpty(customer) && StringUtils.isEmpty(loanNumber.trim())) {
+			
+			return loanRepository.getAllLoanByBookAndCustomer(book,customer, pageable);
+			
+		}else if (ObjectUtils.isNotEmpty(book) && ObjectUtils.isEmpty(customer) && StringUtils.isNotEmpty(loanNumber.trim())) {
+			
+			return loanRepository.getAllLoanByBookAndLoanNumber(book,loanNumber, pageable);
+			
+		}else if (ObjectUtils.isEmpty(book) && ObjectUtils.isNotEmpty(customer) && StringUtils.isNotEmpty(loanNumber.trim())) {
+			
+			return loanRepository.getAllLoanByCustomerAndLoanNumber(customer,loanNumber, pageable);
+			
+		}
+		else {
+			
+			return loanRepository.getAllLoanByBookAndCustomerAndloanNumber(book,customer,loanNumber,pageable);
 		}
 	}
 

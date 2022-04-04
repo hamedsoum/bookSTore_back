@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LoanService {
-	Page<Loan>getAllLoan(Integer book,Pageable pageable);
+	Page<Loan>getAllLoan(Integer book,Integer customer, String loanNumber,Pageable pageable);
 	
 	Loan addNewLoan(LoanDto loanDto);
 	

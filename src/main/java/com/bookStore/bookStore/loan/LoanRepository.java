@@ -17,6 +17,24 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
 	@Query("SELECT l FROM Loan l WHERE l.book.id =:book")
 	Page<Loan>getAllLoanByBook(Integer book,Pageable pageable);
 	
+	@Query("SELECT l FROM Loan l WHERE l.book.id =:book AND l.customer.id =:customer")
+	Page<Loan>getAllLoanByBookAndCustomer(Integer book,Integer customer,Pageable pageable);
+	
+	@Query("SELECT l FROM Loan l WHERE l.book.id =:book AND l.loanNumber LIKE %:loanNumber%")
+	Page<Loan>getAllLoanByBookAndLoanNumber(Integer book,String loanNumber,Pageable pageable);
+		
+	@Query("SELECT l FROM Loan l WHERE l.customer.id =:customer")
+	Page<Loan>getAllLoanByCustomer(Integer customer,Pageable pageable);
+	
+	@Query("SELECT l FROM Loan l WHERE l.customer.id =:customer AND l.loanNumber LIKE %:loanNumber%")
+	Page<Loan>getAllLoanByCustomerAndLoanNumber(Integer customer, String loanNumber,Pageable pageable);
+		
+	@Query("SELECT l FROM Loan l WHERE l.loanNumber LIKE %:loanNumber%")
+	Page<Loan>getAllLoanByLoanNumber(String loanNumber,Pageable pageable);
+	
+	@Query("SELECT l FROM Loan l WHERE l.book.id =:book AND l.customer.id =:customer AND l.loanNumber LIKE %:loanNumber%")
+	Page<Loan>getAllLoanByBookAndCustomerAndloanNumber(Integer book, Integer customer,String loanNumber,Pageable pageable);
+	
 	@Query("SELECT l FROM Loan l WHERE l.id =:id")
 	Loan getDetail(Integer id);
 	

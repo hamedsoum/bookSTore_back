@@ -55,6 +55,8 @@ public class LoanController {
 	@ApiOperation("liste pagine de tous les emprunt dans le systeme")
 	public ResponseEntity<Map<String, Object>> getAllLoan(
 			@RequestParam(required = false, defaultValue = "")  Integer book,
+			@RequestParam(required = false, defaultValue = "")  Integer customer,
+			@RequestParam(required = false, defaultValue = "")  String loanNumber,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "id,desc") String[] sort
@@ -67,7 +69,7 @@ public class LoanController {
 		
 		Page<Loan> pageLoan;
 		
-		pageLoan = loanService.getAllLoan(book, paging);
+		pageLoan = loanService.getAllLoan(book,customer,loanNumber, paging);
 		
 		loanList = pageLoan.getContent();
 		

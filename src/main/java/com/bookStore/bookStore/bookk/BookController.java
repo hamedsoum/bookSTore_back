@@ -72,11 +72,11 @@ public class BookController {
 		
 		if (StringUtils.isNoneBlank(available)) {
 			
-			pageBook = bookService.findAllBookByAvailableAndName(name, Boolean.parseBoolean(available), paging);
+			pageBook = bookService.findAllBookByAvailableAndName(name.trim(), Boolean.parseBoolean(available), paging);
 			
 		}else if  (StringUtils.isNoneBlank(name)){
 			
-			pageBook = bookService.findAllBookByName(name, paging);
+			pageBook = bookService.findAllBookByName(name.trim(), paging);
 		}
 		
 		pageBook.forEach(book ->{
